@@ -13,3 +13,9 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+class ContactForm(FlaskForm):
+    name = StringField('Contact Name', validators=[DataRequired()])
+    phone = StringField('Phone Number', validators=[DataRequired()])
+    submit = SubmitField('Add Contact')
+

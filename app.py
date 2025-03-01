@@ -2,8 +2,8 @@ from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import SignupForm, LoginForm
-from models import db, User
+from forms import SignupForm, LoginForm, ContactForm
+from models import db, User, EmergencyContact
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
@@ -50,10 +50,34 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html', username=current_user.username)
+    form = ContactForm()
+    if form.validate_on_submit():
+        new_contact = EmergencyContact(
+            name=form.name.data, 
+            phone=form.phone.data, 
+            user_id=current_user.id
+        )
+        db.session.add(new_contact)
+        db.session.commit()
+        flash('Emergency Contact Added!', 'success')
+        return redirect(url_for('dashboard'))
+    
+    contacts = EmergencyContact.query.filter_by(user_id=current_user.id).all()
+    return render_template('dashboard.html', form=form, contacts=contacts)
+
+@app.route('/delete_contact/<int:contact_id>', methods=['POST'])
+@login_required
+def delete_contact(contact_id):
+    contact = EmergencyContact.query.get(contact_id)
+    if contact and contact.user_id == current_user.id:
+        db.session.delete(contact)
+        db.session.commit()
+        flash('Contact deleted successfully!', 'success')
+    return redirect(url_for('dashboard'))
+
 
 if __name__ == '__main__':
     with app.app_context():
