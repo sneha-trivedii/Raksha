@@ -14,13 +14,39 @@
                 <a href="{{ url_for('add_contact') }}" class="btn btn-primary btn-lg w-100">Add Emergency Contact</a>
             </div>
             <div class="col-md-3">
-                <a href="https://www.google.com/maps" target="_blank" class="btn btn-info btn-lg w-100">GPS Tracking</a>
+                <button class="btn btn-info btn-lg w-100" onclick="trackLocation()">📍 GPS Tracking</button>
+
+                <script>
+                    function trackLocation() {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition((position) => {
+                                let lat = position.coords.latitude;
+                                let lon = position.coords.longitude;
+
+                                // Open Google Maps with exact location
+                                window.open(`https://www.google.com/maps?q=${lat},${lon}`);
+                            }, (error) => {
+                                alert("Failed to get GPS location. Please enable location services.");
+                            });
+                        } else {
+                            alert("Geolocation is not supported by your browser.");
+                        }
+                    }
+                </script>
+
             </div>
             <div class="col-md-3">
                 <a href="{{ url_for('sos_alert') }}" class="btn btn-danger btn-lg w-100">SOS Alert</a>
             </div>
             <div class="col-md-3">
-                <a href="tel:+911" class="btn btn-warning btn-lg w-100">Fake Call</a>
+                <button class="btn btn-warning btn-lg w-100" onclick="fakeCall()">📞 Fake Call</button>
+
+                <script>
+                    function fakeCall() {
+                        alert("📞 Incoming Call from 911...");  // Simulates an incoming call
+                    }
+                </script>
+
             </div>
         </div>
 
