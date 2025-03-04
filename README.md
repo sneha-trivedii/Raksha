@@ -1,5 +1,6 @@
 # Raksha
 Overview
+
 Raksha is a web-based safety application designed to provide women with a quick and effective way to reach out for help in emergency situations. The application enables users to store emergency contacts, track and share their live GPS location, send SOS alerts via SMS, and simulate a fake call to escape threatening situations.
 
 The system is built using Flask as the backend framework, SQLite for database management, and Bootstrap for a user-friendly and responsive interface. The Twilio API is integrated for sending emergency SMS alerts, and Google Maps API is used to provide accurate location tracking.
